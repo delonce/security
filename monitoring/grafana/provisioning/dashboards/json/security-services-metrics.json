@@ -1,0 +1,177 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "custom": { "axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto" }, "unit": "short"
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "increase(auth_login_attempts_total[5m])", "legendFormat": "Login attempts", "refId": "A" },
+        { "expr": "increase(auth_login_success_total[5m])", "legendFormat": "Login success", "refId": "B" },
+        { "expr": "increase(auth_login_failure_total[5m])", "legendFormat": "Login failure", "refId": "C" }
+      ],
+      "title": "Auth: логин (за 5 мин)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "rate(auth_login_latency_seconds_sum[5m]) / rate(auth_login_latency_seconds_count[5m])", "legendFormat": "Login latency", "refId": "A" },
+        { "expr": "rate(auth_refresh_latency_seconds_sum[5m]) / rate(auth_refresh_latency_seconds_count[5m])", "legendFormat": "Refresh latency", "refId": "B" }
+      ],
+      "title": "Auth: задержка (latency)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 3,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "increase(auth_refresh_attempts_total[5m])", "legendFormat": "Refresh attempts", "refId": "A" },
+        { "expr": "increase(auth_refresh_success_total[5m])", "legendFormat": "Refresh success", "refId": "B" },
+        { "expr": "increase(auth_refresh_failure_total[5m])", "legendFormat": "Refresh failure", "refId": "C" }
+      ],
+      "title": "Auth: refresh токенов (за 5 мин)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 4,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum by (job) (auth_login_attempts_total)", "legendFormat": "{{job}} attempts", "refId": "A" },
+        { "expr": "sum by (job) (auth_login_success_total)", "legendFormat": "{{job}} success", "refId": "B" },
+        { "expr": "sum by (job) (auth_login_failure_total)", "legendFormat": "{{job}} failure", "refId": "C" }
+      ],
+      "title": "Auth: счётчики (всего)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "id": 5,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "increase(user_registration_attempts_total[5m])", "legendFormat": "Registration attempts", "refId": "A" },
+        { "expr": "increase(user_registration_success_total[5m])", "legendFormat": "Registration success", "refId": "B" },
+        { "expr": "increase(user_registration_failure_total[5m])", "legendFormat": "Registration failure", "refId": "C" }
+      ],
+      "title": "User: регистрация (за 5 мин)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "id": 6,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "increase(user_validation_attempts_total[5m])", "legendFormat": "Validation attempts", "refId": "A" },
+        { "expr": "increase(user_validation_success_total[5m])", "legendFormat": "Validation success", "refId": "B" },
+        { "expr": "increase(user_validation_failure_total[5m])", "legendFormat": "Validation failure", "refId": "C" }
+      ],
+      "title": "User: валидация (за 5 мин)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+      "id": 7,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "rate(user_registration_latency_seconds_sum[5m]) / rate(user_registration_latency_seconds_count[5m])", "legendFormat": "Registration latency", "refId": "A" },
+        { "expr": "rate(user_validation_latency_seconds_sum[5m]) / rate(user_validation_latency_seconds_count[5m])", "legendFormat": "Validation latency", "refId": "B" }
+      ],
+      "title": "User: задержка (latency)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
+      "id": 8,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "increase(role_lookup_attempts_total[5m])", "legendFormat": "Lookup attempts", "refId": "A" },
+        { "expr": "increase(role_lookup_success_total[5m])", "legendFormat": "Lookup success", "refId": "B" },
+        { "expr": "increase(role_lookup_failure_total[5m])", "legendFormat": "Lookup failure", "refId": "C" }
+      ],
+      "title": "Role: поиск ролей (за 5 мин)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 32 },
+      "id": 9,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "rate(role_lookup_latency_seconds_sum[5m]) / rate(role_lookup_latency_seconds_count[5m])", "legendFormat": "Role lookup latency", "refId": "A" }
+      ],
+      "title": "Role: задержка (latency)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "reqps" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 32 },
+      "id": 10,
+      "options": { "legend": { "displayMode": "list", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum(rate(http_server_requests_seconds_count{job=~\"auth-service|user-service|role-service\"}[5m])) by (job)", "legendFormat": "{{job}} RPS", "refId": "A" }
+      ],
+      "title": "RPS по сервисам (HTTP)",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["security", "micrometer"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Security Services — метрики",
+  "uid": "security-services-metrics",
+  "version": 1,
+  "weekStart": ""
+}

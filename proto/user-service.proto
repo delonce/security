@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package org.security.user;
+
+option java_multiple_files = true;
+option java_package = "org.security.user.grpc";
+option java_outer_classname = "UserServiceProto";
+
+// Сервис для работы с пользователями
+service UserService {
+  // Валидация учетных данных пользователя
+  rpc ValidateCredentials(ValidateCredentialsRequest) returns (ValidateCredentialsResponse);
+  
+  // Получение пользователя по ID
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserResponse);
+  
+  // Получение пользователя по username
+  rpc GetUserByUsername(GetUserByUsernameRequest) returns (GetUserResponse);
+  
+  // Получение роли по ID
+  rpc GetRoleById(GetRoleByIdRequest) returns (GetRoleResponse);
+  
+  // Получение ролей пользователя
+  rpc GetUserRoles(GetUserRolesRequest) returns (GetUserRolesResponse);
+}
+
+// Запрос на валидацию учетных данных
+message ValidateCredentialsRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// Ответ на валидацию учетных данных
+message ValidateCredentialsResponse {
+  int64 id = 1;
+  string username = 2;
+  bool success = 3;
+  string error_message = 4;
+}
+
+// Запрос на получение пользователя по ID
+message GetUserByIdRequest {
+  int64 id = 1;
+}
+
+// Запрос на получение пользователя по username
+message GetUserByUsernameRequest {
+  string username = 1;
+}
+
+// Ответ с информацией о пользователе
+message GetUserResponse {
+  int64 id = 1;
+  string username = 2;
+  string email = 3;
+  bool enabled = 4;
+  string created_at = 5;
+  string last_login_at = 6;
+  repeated string roles = 7;
+  bool success = 8;
+  string error_message = 9;
+}
+
+// Запрос на получение роли по ID
+message GetRoleByIdRequest {
+  int64 id = 1;
+}
+
+// Ответ с информацией о роли
+message GetRoleResponse {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  bool success = 4;
+  string error_message = 5;
+}
+
+// Запрос на получение ролей пользователя
+message GetUserRolesRequest {
+  int64 user_id = 1;
+}
+
+// Ответ со списком ролей пользователя
+message GetUserRolesResponse {
+  repeated string roles = 1;
+  bool success = 2;
+  string error_message = 3;
+}

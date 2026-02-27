@@ -1,0 +1,28 @@
+appname: role-service
+replicas: 2
+port: 8083
+tier: backend
+
+image:
+  repository: role-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8083
+
+database:
+  host: postgres-role
+  port: 5432
+  name: role_db
+  username: role_user
+  password: role_password
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"

@@ -1,0 +1,28 @@
+appname: user-service
+replicas: 2
+port: 8082
+tier: backend
+
+image:
+  repository: user-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8082
+
+database:
+  host: postgres-user
+  port: 5432
+  name: user_db
+  username: user_user
+  password: user_password
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"

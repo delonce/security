@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="003-insert-default-permissions" author="system">
+        <insert tableName="permissions">
+            <column name="name" value="USER_READ"/>
+            <column name="description" value="Read user information"/>
+            <column name="resource" value="USER"/>
+            <column name="action" value="READ"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="name" value="USER_WRITE"/>
+            <column name="description" value="Create and update users"/>
+            <column name="resource" value="USER"/>
+            <column name="action" value="WRITE"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="name" value="USER_DELETE"/>
+            <column name="description" value="Delete users"/>
+            <column name="resource" value="USER"/>
+            <column name="action" value="DELETE"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="name" value="ROLE_READ"/>
+            <column name="description" value="Read role information"/>
+            <column name="resource" value="ROLE"/>
+            <column name="action" value="READ"/>
+        </insert>
+        <insert tableName="permissions">
+            <column name="name" value="ROLE_WRITE"/>
+            <column name="description" value="Create and update roles"/>
+            <column name="resource" value="ROLE"/>
+            <column name="action" value="WRITE"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

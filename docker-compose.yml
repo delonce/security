@@ -1,0 +1,144 @@
+services:
+  postgres-auth:
+    image: postgres:14-alpine
+    container_name: postgres-auth
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-user:
+    image: postgres:14-alpine
+    container_name: postgres-user
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: user_user
+      POSTGRES_PASSWORD: user_password
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-role:
+    image: postgres:14-alpine
+    container_name: postgres-role
+    environment:
+      POSTGRES_DB: role_db
+      POSTGRES_USER: role_user
+      POSTGRES_PASSWORD: role_password
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U role_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  auth-service:
+#    build:
+#      context: .
+#      dockerfile: auth-service/Dockerfile
+#    container_name: auth-service
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-auth:5432/auth_db
+#      SPRING_DATASOURCE_USERNAME: auth_user
+#      SPRING_DATASOURCE_PASSWORD: auth_password
+#      GRPC_CLIENT_USER_SERVICE_ADDRESS: 'static://user-service:9092'
+#    depends_on:
+#      postgres-auth:
+#        condition: service_healthy
+#      user-service:
+#        condition: service_started
+#    healthcheck:
+#      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+#
+#  user-service:
+#    build:
+#      context: .
+#      dockerfile: user-service/Dockerfile
+#    container_name: user-service
+#    ports:
+#      - "8082:8082"
+#      - "9092:9092"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-user:5432/user_db
+#      SPRING_DATASOURCE_USERNAME: user_user
+#      SPRING_DATASOURCE_PASSWORD: user_password
+#    depends_on:
+#      postgres-user:
+#        condition: service_healthy
+#    healthcheck:
+#      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8082/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+#
+#  role-service:
+#    build:
+#      context: .
+#      dockerfile: role-service/Dockerfile
+#    container_name: role-service
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-role:5432/role_db
+#      SPRING_DATASOURCE_USERNAME: role_user
+#      SPRING_DATASOURCE_PASSWORD: role_password
+#      GRPC_CLIENT_USER_SERVICE_ADDRESS: 'static://user-service:9092'
+#    depends_on:
+#      postgres-role:
+#        condition: service_healthy
+#      user-service:
+#        condition: service_started
+#    healthcheck:
+#      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8083/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 3
+
+  # Prometheus — сбор метрик (сервисы на хосте: mvn spring-boot:run → host.docker.internal)
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  # Grafana — визуализация метрик (логин admin / admin)
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_SERVER_HTTP_PORT: 3000
+      GF_INSTALL_PLUGINS: ""
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
